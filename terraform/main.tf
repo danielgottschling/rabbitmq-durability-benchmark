@@ -52,6 +52,7 @@ resource "google_compute_instance" "receiver-vm" {
     access_config {
     }
   }
+  metadata_startup_script = file("./receiver-vm-startup.sh")
   #tags = ["http-server"]
 }
 
@@ -72,6 +73,7 @@ resource "google_compute_instance" "publisher-vm" {
     access_config {
     }
   }
+  metadata_startup_script = file("./publisher-vm-startup.sh")
   #tags = ["http-server"]
 }
 
