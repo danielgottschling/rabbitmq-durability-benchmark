@@ -17,7 +17,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func generateRandomMessage(length int) string {
+func generateRandomMessage(length uint64) string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 	message := make([]byte, length)
@@ -84,7 +84,7 @@ func publishMessages(conn *amqp.Connection, queueName string, duration time.Dura
 func main() {
 	rabbitmqHost := flag.String("rabbitmqHost", "10.0.0.2", "Ip adress of the RabbitMQ Instance")
 	queueName := flag.String("queueName", "transient_queue", "Name of the RabbitMQ queue")
-	messageSize := flag.Int("messageSize", 1000, "Size of the messages in bytes")
+	messageSize := flag.Uint64("messageSize", 1000, "Size of the messages in bytes")
 	numPublishers := flag.Int("numPublishers", 10, "Number of concurrent publishers")
 	testDuration := flag.Int("testDuration", 100, "Test duration in seconds")
 	rate := flag.Int("rate", 100, "Rate of messages per second")
