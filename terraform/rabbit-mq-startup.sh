@@ -59,5 +59,15 @@ chmod +x rabbitmqadmin
 ./rabbitmqadmin declare queue name=durable_queue durable=true
 ./rabbitmqadmin declare queue name=transient_queue durable=false
 
+# Artificially limiting the cpu usage of the rabbitmq server
+# sudo apt-get install cpulimit
+
+# Limit the CPU usage of the rabbitmq server to 50%
+# sudo cpulimit -l 50 -p $(pgrep beam.smp)
+
+# clone repository
+cd /home/daniel/
+git clone https://github.com/danielgottschling/rabbitmq-durability-benchmark.git
+
 # Confirm startup script has finished executing
 mkdir /home/daniel/finished

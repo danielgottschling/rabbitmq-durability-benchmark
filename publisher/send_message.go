@@ -27,7 +27,7 @@ func generateRandomMessage(length int) string {
 	return string(message)
 }
 
-func publishMessages(conn *amqp.Connection, queueName string, messageSize int, duration time.Duration, rate int, wg *sync.WaitGroup, generatedMessage string) {
+func publishMessages(conn *amqp.Connection, queueName string, duration time.Duration, rate int, wg *sync.WaitGroup, generatedMessage string) {
 	defer wg.Done()
 
 	ch, err := conn.Channel() // Open a separate channel for each publisher
@@ -83,11 +83,12 @@ func publishMessages(conn *amqp.Connection, queueName string, messageSize int, d
 
 func main() {
 	rabbitmqHost := flag.String("rabbitmqHost", "10.0.0.2", "Ip adress of the RabbitMQ Instance")
-	queueName := flag.String("queueName", "durable_queue", "Name of the RabbitMQ queue")
+	queueName := flag.String("queueName", "transient_queue", "Name of the RabbitMQ queue")
 	messageSize := flag.Int("messageSize", 1000, "Size of the messages in bytes")
-	numPublishers := flag.Int("numPublishers", 100, "Number of concurrent publishers")
-	testDuration := flag.Int("testDuration", 20, "Test duration in seconds")
-	rate := flag.Int("rate", 10000, "Rate of messages per second")
+	numPublishers := flag.Int("numPublishers", 10, "Number of concurrent publishers")
+	testDuration := flag.Int("testDuration", 100, "Test duration in seconds")
+	rate := flag.Int("rate", 100, "Rate of messages per second")
+	// go run send_message.go -messageSize=1000 -numPublishers=100 -testDuration=20 -rate=1000 -queueName="transient_queue"
 
 	message := generateRandomMessage(*messageSize)
 
@@ -101,7 +102,7 @@ func main() {
 	var wg sync.WaitGroup
 	for i := 0; i < *numPublishers; i++ {
 		wg.Add(1)
-		go publishMessages(conn, *queueName, *messageSize, time.Duration(*testDuration)*time.Second, *rate, &wg, message)
+		go publishMessages(conn, *queueName, time.Duration(*testDuration)*time.Second, *rate, &wg, message)
 	}
 
 	// Wait for all publishers to finish

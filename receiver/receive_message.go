@@ -19,7 +19,8 @@ func failOnError(err error, msg string) {
 func main() {
 	rabbitmqHost := flag.String("rabbitmqHost", "10.0.0.2", "Ip adress of the RabbitMQ Instance")
 	queueName := flag.String("queueName", "transient_queue", "Name of the RabbitMQ queue")
-	benchmarkID := "run_1" // Example benchmark ID
+	benchmarkID := flag.String("benchmarkID", "run_1", "Example benchmark ID")
+	// sudo go run receive_message.go -queueName="transient_queue"
 
 	flag.Parse() // Parse the flags
 
@@ -43,7 +44,7 @@ func main() {
 	failOnError(err, "Failed to register a consumer")
 
 	// Open CSV file
-	file, err := os.Create("benchmark_" + benchmarkID + ".csv")
+	file, err := os.Create("benchmark_" + *benchmarkID + ".csv")
 	failOnError(err, "Failed to create CSV file")
 	defer file.Close()
 
@@ -73,7 +74,7 @@ func main() {
 				string(messageCount), // message_id
 				sentTime,             // sent_time
 				receivedTime,         // received_time
-				benchmarkID,          // benchmark_id
+				*benchmarkID,         // benchmark_id
 				*queueName,           // queue_type
 			})
 			if err != nil {

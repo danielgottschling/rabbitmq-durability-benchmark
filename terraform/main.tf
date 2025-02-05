@@ -37,7 +37,7 @@ resource "google_compute_instance" "rabbit-mq-vm" {
 
 resource "google_compute_instance" "receiver-vm" {
   name         = "receiver-vm"
-  machine_type = "e2-standard-2"
+  machine_type = "e2-highcpu-8"
   zone         = "europe-west3-c"
   boot_disk {
     auto_delete = true
@@ -58,7 +58,7 @@ resource "google_compute_instance" "receiver-vm" {
 
 resource "google_compute_instance" "publisher-vm" {
   name         = "publisher-vm"
-  machine_type = "e2-standard-2"
+  machine_type = "e2-highcpu-8"
   zone         = "europe-west3-c"
   boot_disk {
     auto_delete = true
